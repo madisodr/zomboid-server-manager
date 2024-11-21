@@ -1,4 +1,4 @@
-FROM golang:1.23.2-bullseye as base
+FROM golang:1.23.2-bullseye AS base
 
 RUN adduser \
   --disabled-password \
@@ -21,8 +21,9 @@ RUN go mod verify
 
 # Copy the source from the current directory to the Working Directory inside the container
 COPY ./cmd /app/cmd
+COPY ./internal /app/internal
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./app/zomboid-server-manager ./cmd
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /zomboid-server-manager ./cmd
 
 FROM scratch
 
@@ -31,7 +32,7 @@ COPY --from=base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base /etc/passwd /etc/passwd
 COPY --from=base /etc/group /etc/group
 
-COPY --from=base ./app/zomboid-server-manager .
+COPY --from=base /zomboid-server-manager .
 
 USER zomboid-server-manager:zomboid-server-manager
 

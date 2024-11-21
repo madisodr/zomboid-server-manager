@@ -1,5 +1,5 @@
 APP_NAME = zomboid-server-manager
-IMAGE_NAME = bananbulance/$(APP_NAME)
+IMAGE_NAME = winterthemute/$(APP_NAME)
 DOCKERFILE_PATH = .
 SHELL := /bin/bash
 
