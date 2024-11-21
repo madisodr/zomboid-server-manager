@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  project-zomboid:
+    container_name: pzserver
+    image: pepecitron/projectzomboid-server
+    restart: always
+    depends_on:
+      - zomboid-server-manager
+    env_file: "config.env"
+    environment:
+      SERVER_ADMIN_PASSWORD: "test"
+      SERVER_PASSWORD: "churl"
+      SERVER_NAME: "Churlsquad goes to Louisville"
+      SERVER_PUBLIC_NAME: "Churlsquad goes to Louisville"
+      SERVER_PUBLIC: "false"
+      SERVER_MAX_PLAYER: "10"
+    ports:
+      - "16261:16261/udp"
+      - "16262:16262/udp"
+      - "27015:27015"
+    volumes:
+      - /opt/project-zomboid-server-docker/data/server-file:/data/server-file
+      - /opt/project-zomboid-server-docker/data/config:/data/config
+
+  zomboid-server-manager:
+    container_name: zomboid-server-manager
+    image: bananbulance/zomboid-server-manager
+    restart: always
+    env_file: "config.env"
+    ports:
+      - "16263:16263"
+    volumes:
+      - /opt/project-zomboid-server-docker/data/config:/data/config # path to the zomboid configuration folder
+      - /opt/project-zomboid-server-docker/data/server-file/steamapps/workshop:/app # path to the steam workshop folder

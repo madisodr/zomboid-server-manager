@@ -1,0 +1,5 @@
+app/zomboid-server-manager
+test-data/*
+vendor/
+.vscode
+config.env
