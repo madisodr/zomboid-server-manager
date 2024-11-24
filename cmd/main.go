@@ -70,7 +70,7 @@ func main() {
 		modUpdateCount := steam.CheckForUpdates(cfg.SteamAPIKey, cfg.ACFFile)
 		if modUpdateCount != 0 {
 			log.Printf("%d mods need updating.\n", modUpdateCount)
-			//initServerShutdown()
+			rconConnection.ServerShutdown(cfg.ShutdownDuration)
 		} else {
 			log.Println("No updates found.")
 		}

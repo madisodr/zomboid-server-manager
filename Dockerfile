@@ -7,7 +7,7 @@ RUN adduser \
   --shell "/sbin/nologin" \
   --no-create-home \
   --uid 65532 \
-  pzt-user
+  zomboid-server-manager
 
 # Set the Current Working Directory inside the container
 WORKDIR /app

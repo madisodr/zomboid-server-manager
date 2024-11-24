@@ -1,5 +1,5 @@
-
 # Zomboid Server Manager
+https://github.com/madisodr/zomboid-server-manager/releases/latest
 
 ## Usage
 
@@ -10,8 +10,19 @@
 * Steam API Key
 * RCON Enabled
 
+## Installation
+### Configuration
+In the config directory, copy or rename the file config.example to config.env.
 
-#### Automatic Backups
+## Building
+
+### Linux/Mac
+
+### Windows
+
+### Docker
+
+### docker-compose
 
 ### RoadMap
 * Automatic Backups
@@ -21,11 +32,3 @@
 	* Sort mods based on rules and dependencies
 * User Management
 	* toggle user admin
-
-## Installation
-
-## Build
-
-### Docker
-
-### docker-compose

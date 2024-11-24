@@ -23,7 +23,7 @@ func NewRconConnection(host string, port int, password string) (*rconConnection,
 	return &rconConnection{conn: conn}, nil
 }
 
-func (rc *rconConnection) ServerShutdown(rconConnection *rconConnection, shutdownDuration time.Duration) {
+func (rc *rconConnection) ServerShutdown(shutdownDuration time.Duration) {
 	log.Println("Update required. Beginning shutdown process.")
 
 	shutdownTimer := utils.NewSecondsTimer(shutdownDuration)
@@ -36,7 +36,7 @@ func (rc *rconConnection) ServerShutdown(rconConnection *rconConnection, shutdow
 	for {
 		select {
 		case <-shutdownTimer.Timer.C:
-			err := rconConnection.saveAndShutdown()
+			err := rc.saveAndShutdown()
 			if err != nil {
 				log.Fatal(err)
 			}

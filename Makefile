@@ -1,17 +1,28 @@
-APP_NAME = zomboid-server-manager
-IMAGE_NAME = winterthemute/$(APP_NAME)
-DOCKERFILE_PATH = .
-SHELL := /bin/bash
+APPLICATION_NAME := zomboid-server-manager
+BUILD_VERSION := 0.0.1
 
-.PHONY: all build build-docker
+DOCKER_USERNAME := winterthemute
+DOCKER_DEFAULT_PLATFORM := linux/amd64
+DOCKER_IMAGE := $(DOCKER_USERNAME)/$(APPLICATION_NAME)
 
-all: build build-docker
+BIN_DIRECTORY := ./bin
+GO_CMD_DIR := ./cmd
 
+export DOCKER_DEFAULT_PLATFORM
+
+.PHONY: build run
 build:
-	go build -o ./app/$(APP_NAME) ./cmd
+	go build -o $(BIN_DIRECTORY)/$(APPLICATION_NAME) $(GO_CMD_DIR)
 
 run:
-	source config.env && ./app/$(APP_NAME)
+	$(BIN_DIRECTORY)/$(APPLICATION_NAME)
 
-build-docker:
-	docker build -t $(IMAGE_NAME) $(DOCKERFILE_PATH)
+# Docker
+.PHONY: docker-build publish
+docker-build:
+	docker build -t $(DOCKER_IMAGE) .
+
+publish:
+	docker tag $(DOCKER_USERNAME)/$(APPLICATION_NAME):latest $(DOCKER_USERNAME)/$(APPLICATION_NAME):$(BUILD_VERSION) && \
+  docker push $(DOCKER_USERNAME)/$(APPLICATION_NAME):latest && \
+	docker push $(DOCKER_USERNAME)/$(APPLICATION_NAME):$(BUILD_VERSION)
