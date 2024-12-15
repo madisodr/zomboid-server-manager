@@ -27,7 +27,7 @@ services:
     container_name: zomboid-server-manager
     image: winterthemute/zomboid-server-manager
     restart: always
-    env_file: "config/config.env"
+    env_file: "config/.env"
     ports:
       - "16263:16263"
     volumes:

@@ -1,5 +1,6 @@
 package steam
 
+// TODO maybe slim this down to just hold the necessary data
 type SteamApiResponse struct {
 	Response struct {
 		PublishedFileDetails []struct {
@@ -59,18 +60,10 @@ type SteamApiResponse struct {
 }
 
 type WorkshopItem struct {
-	Size        string `json:"size"`
-	TimeUpdated string `json:"timeupdated"`
-	Manifest    string `json:"manifest"`
-}
-
-type ACF struct {
-	AppID                  string                  `json:"appid"`
-	SizeOnDisk             string                  `json:"sizeondisk"`
-	NeedsUpdate            string                  `json:"needsupdate"`
-	NeedsDownload          string                  `json:"needsdownload"`
-	TimeLastUpdated        string                  `json:"timelastupdated"`
-	TimeLastAppRan         string                  `json:"timelastappran"`
-	LastBuildID            string                  `json:"lastbuildid"`
-	WorkshopItemsInstalled map[string]WorkshopItem `json:"workshopitemsinstalled"`
+	Size              string `json:"size"`
+	Manifest          string `json:"manifest"`
+	TimeUpdated       string `json:"timeupdated"`
+	TimeTouched       string `json:"timetouched"`
+	LatestTimeUpdated string `json:"latest_timeupdated"`
+	LatestManifest    string `json:"latest_manifest"`
 }

@@ -4,5 +4,5 @@ vendor/
 
 # ignore my custom tests and configuration
 test-data/
-config/config.env
+config/.env
 .vscode

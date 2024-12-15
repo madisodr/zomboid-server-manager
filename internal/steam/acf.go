@@ -9,6 +9,17 @@ import (
 	"unicode"
 )
 
+type ACF struct {
+	AppID                  string                  `json:"appid"`
+	SizeOnDisk             string                  `json:"sizeondisk"`
+	NeedsUpdate            string                  `json:"needsupdate"`
+	NeedsDownload          string                  `json:"needsdownload"`
+	TimeLastUpdated        string                  `json:"timelastupdated"`
+	TimeLastAppRan         string                  `json:"timelastappran"`
+	LastBuildID            string                  `json:"lastbuildid"`
+	WorkshopItemsInstalled map[string]WorkshopItem `json:"workshopitemsinstalled"`
+}
+
 func removeSpaceAndTab(s string) string {
 	rr := make([]rune, 0, len(s))
 	for _, r := range s {
@@ -19,10 +30,10 @@ func removeSpaceAndTab(s string) string {
 	return string(rr)
 }
 
-func ParseACF(filename string) (ACF, error) {
+func ParseACF(filename string) (*ACF, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return ACF{}, err
+		return nil, err
 	}
 	defer file.Close()
 
@@ -31,6 +42,8 @@ func ParseACF(filename string) (ACF, error) {
 	acf := ACF{WorkshopItemsInstalled: make(map[string]WorkshopItem)}
 	var currentItem WorkshopItem
 	var currentKey string
+
+	parsingInstalled := true
 
 	for scanner.Scan() {
 		// remove spaces and tabs from the line
@@ -55,7 +68,7 @@ func ParseACF(filename string) (ACF, error) {
 				case "appid":
 					acf.AppID = parts[1]
 					if acf.AppID != ZomboidSteamID {
-						return ACF{}, fmt.Errorf("AppID is not for Project Zomboid (%s), got %s", ZomboidSteamID, acf.AppID)
+						return nil, fmt.Errorf("AppID is not for Project Zomboid (%s), got %s", ZomboidSteamID, acf.AppID)
 					}
 				case "SizeOnDisk":
 					acf.SizeOnDisk = parts[1]
@@ -69,28 +82,38 @@ func ParseACF(filename string) (ACF, error) {
 					acf.TimeLastAppRan = parts[1]
 				case "LastBuildID":
 					acf.LastBuildID = parts[1]
+				case "WorkshopItemsInstalled":
+					log.Println("WorkshopItemsInstalled")
+					parsingInstalled = true
+				case "WorkshopItemDetails":
+					log.Println("WorkshopItemDetails")
+					parsingInstalled = false
 				}
 			} else if stack == 2 {
-				currentKey = key
-				currentItem = WorkshopItem{}
-			} else if stack == 3 {
-				switch key {
-				case "size":
-					currentItem.Size = parts[1]
-				case "timeupdated":
-					currentItem.TimeUpdated = parts[1]
-				case "manifest":
-					currentItem.Manifest = parts[1]
+				if parsingInstalled {
+					currentKey = key
+					currentItem = WorkshopItem{}
 				}
-				acf.WorkshopItemsInstalled[currentKey] = currentItem
+			} else if stack == 3 {
+				if parsingInstalled {
+					switch key {
+					case "size":
+						currentItem.Size = parts[1]
+					case "timeupdated":
+						currentItem.TimeUpdated = parts[1]
+					case "manifest":
+						currentItem.Manifest = parts[1]
+					}
+					acf.WorkshopItemsInstalled[currentKey] = currentItem
+				}
 			}
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		return ACF{}, err
+		return nil, err
 	}
 
-	log.Println("Loaded ACF Files")
-	return acf, nil
+	log.Println("Parsed ACF File")
+	return &acf, nil
 }

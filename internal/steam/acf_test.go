@@ -6,11 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
-func TestParseACF(t *testing.T) {
+func Test_ParseACF(t *testing.T) {
 	const testFilename = "./test-data/appworkshop_108600.acf"
 
-	expectedACF := ACF{
+	expectedACF := &ACF{
 		AppID:           "108600",
 		SizeOnDisk:      "7953164623",
 		NeedsUpdate:     "0",

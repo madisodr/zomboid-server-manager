@@ -21,6 +21,9 @@ run:
 .PHONY: docker-build publish
 docker-build:
 	docker build -t $(DOCKER_IMAGE) .
+	
+docker-run:
+	docker run --env-file ./config/.env --rm -it $(DOCKER_IMAGE):latest
 
 publish:
 	docker tag $(DOCKER_USERNAME)/$(APPLICATION_NAME):latest $(DOCKER_USERNAME)/$(APPLICATION_NAME):$(BUILD_VERSION) && \

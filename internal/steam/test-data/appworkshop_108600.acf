@@ -28,4 +28,31 @@
 			"manifest"		"8461494127040368662"
 		}
 	}
+	"WorkshopItemDetails"
+	{
+		"909647363"
+		{
+			"manifest"		"3386588971063334798"
+			"timeupdated"		"1538452157"
+			"timetouched"		"1727698339"
+			"latest_timeupdated"		"1538452157"
+			"latest_manifest"		"3386588971063334798"
+		}
+		"1510950729"
+		{
+			"manifest"		"4082144191834930601"
+			"timeupdated"		"1648791612"
+			"timetouched"		"1728905779"
+			"latest_timeupdated"		"1648791612"
+			"latest_manifest"		"4082144191834930601"
+		}
+		"1516836158"
+		{
+			"manifest"		"8461494127040368662"
+			"timeupdated"		"1660964843"
+			"timetouched"		"1734006611"
+			"latest_timeupdated"		"1660964843"
+			"latest_manifest"		"8461494127040368662"
+		}
+	}
 }

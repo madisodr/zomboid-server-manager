@@ -34,6 +34,8 @@ COPY --from=base /etc/group /etc/group
 
 COPY --from=base /zomboid-server-manager .
 
+COPY ./test-data /test-data
+
 USER zomboid-server-manager:zomboid-server-manager
 
 CMD ["./zomboid-server-manager"]

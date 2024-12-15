@@ -1,25 +1,42 @@
 package utils
 
 import (
-	"fmt"
-	"os"
+	"errors"
+	"reflect"
 
 	"gopkg.in/ini.v1"
 )
 
-func loadIniFile() {
-	inidata, err := ini.Load("config.ini")
-	if err != nil {
-		fmt.Printf("Fail to read file: %v", err)
-		os.Exit(1)
+func LoadIni(filename string, v interface{}) error {
+	if reflect.ValueOf(v).Kind() != reflect.Ptr {
+		return errors.New("v must be a pointer to a struct")
 	}
-	section := inidata.Section("database")
 
-	fmt.Println(section.Key("host").String())
-	fmt.Println(section.Key("port").String())
-	fmt.Println(section.Key("username").String())
-	fmt.Println(section.Key("password").String())
+	// IgnoreInlineComment is required in order to load ini values that use a semi-colon as a delimiter
+	// For example, Mods=someMod;anotherMod;yetAnotherMod;
+	inidata, err := ini.LoadSources(ini.LoadOptions{IgnoreInlineComment: true}, filename)
+	if err != nil {
+		return err
+	}
 
-	section = inidata.Section("database.options")
-	fmt.Println(section.Key("sslmode").String())
+	err = inidata.MapTo(v)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func SaveIni(filename string, v interface{}) error {
+	if reflect.ValueOf(v).Kind() != reflect.Ptr {
+		return errors.New("v must be a pointer to a struct")
+	}
+
+	inidata := ini.Empty()
+	err := ini.ReflectFrom(inidata, v)
+	if err != nil {
+		return err
+	}
+
+	return inidata.SaveTo(filename)
 }
