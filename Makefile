@@ -1,5 +1,5 @@
 APPLICATION_NAME := zomboid-server-manager
-BUILD_VERSION := 0.0.1
+BUILD_VERSION := 0.0.2
 
 DOCKER_USERNAME := winterthemute
 DOCKER_DEFAULT_PLATFORM := linux/amd64
